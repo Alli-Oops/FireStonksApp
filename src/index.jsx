@@ -1,4 +1,4 @@
-/* index.jsx file has our FireStonksApp that we render. Our Authenticated routes to the
+/* index.jsx file has our FireStonksApp that we render. It renders our Authenticated routes to the
 pages that our App consists of (Homepage and Listpage)
 */
 
@@ -43,4 +43,4 @@ ReactDOM.render(
         < App />
     </React.StrictMode>,
 document.getElementById("root")
-);  
+); 
