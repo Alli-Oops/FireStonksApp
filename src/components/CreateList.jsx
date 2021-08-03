@@ -13,7 +13,7 @@ const DEFAULT_LIST = {
 
 function CreateList({ user }) {
     const [list, setList] = React.useState(DEFAULT_LIST)       // create some state for the lists, make this state an object that we referece with DEFAULT_LIST -- consisting of the properties: name, description, and image
-    const [submitting, setsubmitting] = React.useState(false)   // we can use this 'submitting' state for disabling the submit button, and to show our user that we're in the process of creating our list
+    const [submitting, setSubmitting] = React.useState(false)   // we can use this 'submitting' state for disabling the submit button, and to show our user that we're in the process of creating our list
 
     function handleInputChange(event) {                         // this function handles the change event and specifically gets data from event.target and we want 2 values *name* and *value*
         const {name, value, files } = event.target;
@@ -80,8 +80,10 @@ function CreateList({ user }) {
         {/* "mb-4" gives margin on the bottom */}
         {/* URL.createObjectURL(list.image)  <<-- this creates a preview image from the provided image*/}
         {/* onClick we need a handler function that creates a list */}
-                <button onClick={handleCreateList} className="text-white bg-green-500 border-0 py-2 px-8 focus:outline-none hover:bg-green-600 rounded text-lg">
+                <button 
+                    onClick={handleCreateList} 
                     disabled={submitting}
+                    className="text-white bg-green-500 border-0 py-2 px-8 focus:outline-none hover:bg-green-600 rounded text-lg">
                     {submitting ? "Creating..." : "Create List"}
                 </button>
                 <p className="text-xs text-gray-600 mt-3">*List name required</p>

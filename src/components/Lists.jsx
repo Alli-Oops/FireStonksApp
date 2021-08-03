@@ -58,11 +58,11 @@ function UserListCount({ count }) {                                     // we ca
 }
 
 function ListItem({ list }) {                                           // this takes the data from the list prop to display it to the user's lists - but we can destructure the list object
-  const { id, name, description, image} = list                          // this destructures the list object to get the values we need - id, name, description, image, and users that are a part of the list
+  const { id, name, description, image, users} = list                          // this destructures the list object to get the values we need - id, name, description, image, and users that are a part of the list
     return (
         <div className="lg:w-1/3 sm:w-1/2 p-4">
         {" "}
-        <Link to={`/id`}>                                               {/* the id that we get from destructuring the list is for this Link - which links various users to the list*/}
+        <Link to={`/${id}`}>                                               {/* the id that we get from destructuring the list is for this Link - which links various users to the list*/}
             <div className="flex relative">
             <img
                 alt="gallery"
@@ -72,7 +72,8 @@ function ListItem({ list }) {                                           // this 
             <div className="px-8 py-10 relative z-10 w-full border-4 border-gray-800 bg-gray-900 opacity-0 hover:opacity-100">
                 <ul className="list-disc">
                 <li className="tracking-widest text-sm title-font font-medium text-orange-500 mb-1">
-                    {users[0].name} {users.length > 1 && `+ ${users.length - 1} others`}
+                    {users[0].name}{" "}
+                    {users.length > 1 && `+ ${users.length - 1} others`}
                                                                         {/* Here ^^ we display the users Username - and that comes from the user's array*/}
                                                                         {/* Then we we can use a terenary to display if other the users are apart of the list */}
                 </li>
