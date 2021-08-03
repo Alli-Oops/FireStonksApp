@@ -35,7 +35,6 @@ function AuthApp({ user }) {
 
 function UnAuthApp() {
     return <SignIn/>                                         //This returns the SignIn component for rendering
-
 }
 
 ReactDOM.render(

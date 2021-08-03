@@ -10,7 +10,7 @@ import Loading from "./shared/Loading";
 import useSWR from 'swr' // stale while revalidate 
 
 
-function UserLists({ user }) {
+function UserLists({ user }) {                                          // Should this be Lists? or UserLists?
     const { data: lists, error } = useSWR(user.uid, db.getUserLists)    // useSWR() accepts first argument - in this case the 'str' that is the userID. // And that first argument is passed to the second argument. // The second argument is a function that takes care of the fetching for us - so in this case, the db.getUserLists function // from useSWR(user.uid, db.getUserLists) ... we get back an object {} that has a couple of values { data , error } // data comes back if it resolves successfully OR error comes back if there is a problem with performing the request.
     if (error) return <Error message={error.message} />;                // If there is an error, we want to return the error component
     if (!lists) return <Loading/>;                                      // If we dont have our list data yet, we want to return our Loading.jsx component
@@ -67,7 +67,7 @@ function ListItem({ list }) {                                           // this 
             <img
                 alt="gallery"
                 className="absolute inset-0 w-full h-full object-cover object-center"
-                src={image || defaultImage}                             {/* here we display either the image provided or the defaultImage */}
+                src={image || defaultImage}                            
             />
             <div className="px-8 py-10 relative z-10 w-full border-4 border-gray-800 bg-gray-900 opacity-0 hover:opacity-100">
                 <ul className="list-disc">
@@ -88,4 +88,4 @@ function ListItem({ list }) {                                           // this 
     );
 }
 
-export default UserLists;
+export default UserLists; // Should this export UserLists? or Lists?

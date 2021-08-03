@@ -2,7 +2,7 @@
 
 import React from "react";
 import CreateList from "../components/CreateList";
-import Lists from "../components/Lists";
+import Lists from "../components/Lists"; // should this be UserLists? or Lists?
 import Layout from "../components/shared/Layout";
 import { UserContext } from '../index'; // Need to import UserContext as a *named import between curly braces
 
@@ -14,7 +14,7 @@ function HomePage() {
     return (
         <Layout>
         <CreateList user={ user } />  {/* You COULD alternatively put the userContext inside the CreateList component, but <<here>> we are passing the UserContext in as a prop*/}
-        <Lists user={ user } />
+        <Lists user={ user } /> {/* should this be UserLists? or Lists? */}
         </Layout>
     );
 }

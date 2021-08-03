@@ -12,7 +12,7 @@ const DEFAULT_LIST = {
 
 
 function CreateList({ user }) {
-    const [list, setList] = React.useState(DEFUALT_STATE)       // create some state for the lists, make this state an object that we referece with DEFAULT_STATE -- consisting of the properties: name, description, and image
+    const [list, setList] = React.useState(DEFAULT_LIST)       // create some state for the lists, make this state an object that we referece with DEFAULT_LIST -- consisting of the properties: name, description, and image
     const [submitting, setsubmitting] = React.useState(false)   // we can use this 'submitting' state for disabling the submit button, and to show our user that we're in the process of creating our list
 
     function handleInputChange(event) {                         // this function handles the change event and specifically gets data from event.target and we want 2 values *name* and *value*
@@ -41,51 +41,51 @@ function CreateList({ user }) {
 
     return (
         <div className="flex flex-col text-center w-full mb-12">
-        <h1 className="text-2xl font-medium title-font mb-4 text-white tracking-widest">
-            WELCOME, {user.displayName.toUpperCase()}!
-        </h1>
-        <p className="lg:w-2/3 mx-auto mb-12 leading-relaxed text-base">
-            To get started, create a list with a name and a cover image
-        </p>
-        <div className="lg:w-2/6 mx-auto md:w-1/2 bg-gray-800 rounded-lg p-8 flex flex-col md:ml-auto w-full mt-10 md:mt-0">
-            <input
-            className="bg-gray-900 rounded border text-white border-gray-900 focus:outline-none focus:border-green-500 text-base px-4 py-2 mb-4"
-            placeholder="Add list name"
-            type="text"
-            name="name"
-            onChange={handleInputChange}                        // this will handle the event when a user provides an input
-            value={list.name}                                   // this makes it so that the value of the input is controlled by state
-            required
-            />
-            <textarea
-            className="bg-gray-900 rounded border text-white border-gray-900 focus:outline-none focus:border-green-500 text-base px-4 py-2 mb-4"
-            placeholder="Add short description"
-            type="text"
-            name="description"
-            onChange={handleInputChange}
-            value={list.description}                            // this makes it so that the value of the input is controlled by state
-            />
-            <input
-            className="bg-gray-900 rounded border text-white border-gray-900 focus:outline-none focus:border-green-500 text-base px-4 py-2 mb-4"
-            placeholder="Add list name"
-            type="file"
-            name="image"
-            onChange={handleInputChange}                        // the file cannot be controlled by state
-            />
-    {/* display preview image we need a conditional to use the image that a user inputs - IF we have it */} 
-    {/* The && oprerator will return the list.image -- if we have that image -- */}
-            {list.image && (
-            <img className="mb-4" src={URL.createObjectURL(list.image)} />  
-            )}
-    {/* "mb-4" gives margin on the bottom */}
-    {/* URL.createObjectURL(list.image)  <<-- this creates a preview image from the provided image*/}
-    {/* onClick we need a handler function that creates a list */}
-            <button onClick={handleCreateList} className="text-white bg-green-500 border-0 py-2 px-8 focus:outline-none hover:bg-green-600 rounded text-lg">
-            disabled={submitting}
-            {submitting ? "Creating..." : "Create List"}
-            </button>
-            <p className="text-xs text-gray-600 mt-3">*List name required</p>
-        </div>
+            <h1 className="text-2xl font-medium title-font mb-4 text-white tracking-widest">
+                WELCOME, {user.displayName.toUpperCase()}!
+            </h1>
+            <p className="lg:w-2/3 mx-auto mb-12 leading-relaxed text-base">
+                To get started, create a list with a name and a cover image
+            </p>
+            <div className="lg:w-2/6 mx-auto md:w-1/2 bg-gray-800 rounded-lg p-8 flex flex-col md:ml-auto w-full mt-10 md:mt-0">
+                <input
+                    className="bg-gray-900 rounded border text-white border-gray-900 focus:outline-none focus:border-green-500 text-base px-4 py-2 mb-4"
+                    placeholder="Add list name"
+                    type="text"
+                    name="name"
+                    onChange={handleInputChange}                        // this will handle the event when a user provides an input
+                    value={list.name}                                   // this makes it so that the value of the input is controlled by state
+                    required
+                />
+                <textarea
+                    className="bg-gray-900 rounded border text-white border-gray-900 focus:outline-none focus:border-green-500 text-base px-4 py-2 mb-4"
+                    placeholder="Add short description"
+                    type="text"
+                    name="description"
+                    onChange={handleInputChange}
+                    value={list.description}                            // this makes it so that the value of the input is controlled by state
+                />
+                <input
+                    className="bg-gray-900 rounded border text-white border-gray-900 focus:outline-none focus:border-green-500 text-base px-4 py-2 mb-4"
+                    placeholder="Add list name"
+                    type="file"
+                    name="image"
+                    onChange={handleInputChange}                        // the file cannot be controlled by state
+                />
+        {/* display preview image we need a conditional to use the image that a user inputs - IF we have it */} 
+        {/* The && oprerator will return the list.image -- if we have that image -- */}
+                {list.image && (
+                <img className="mb-4" src={URL.createObjectURL(list.image)} />  
+                )}
+        {/* "mb-4" gives margin on the bottom */}
+        {/* URL.createObjectURL(list.image)  <<-- this creates a preview image from the provided image*/}
+        {/* onClick we need a handler function that creates a list */}
+                <button onClick={handleCreateList} className="text-white bg-green-500 border-0 py-2 px-8 focus:outline-none hover:bg-green-600 rounded text-lg">
+                    disabled={submitting}
+                    {submitting ? "Creating..." : "Create List"}
+                </button>
+                <p className="text-xs text-gray-600 mt-3">*List name required</p>
+            </div>
         </div>
     );
 }

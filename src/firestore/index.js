@@ -41,14 +41,16 @@ export async function logOut() {
 }
 
 /////////////////////////////////////////////////////////////////////////
-/* ######### retrieve/GET the User List Data from Firestore ########## */       // we pass in the collection with "id" which is going to be the 'lists' collection
+/* ######### CRUD Data from Firestore ########## */       
+
+/* ######### GET all the Lists Data from Firestore ########## */                // we pass in the collection with "id" which is going to be the 'lists' collection
 export async function getCollection(id) {                                       // to get all the data we need to reference the collection and use the get()
     const snapshot = await db.collection(id).get()                              // it will be in the form of a promise, so we need to make the function async and await the response // we will get back a query "snapshot" so we'll call the variable holding this "snapshot"
     const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data()}))       // then all of the data- will be provided on snapshot.docs // then we use the map() function to map over it and for each document, we want to create a new array where we return an object
     console.log(data)                                                           // so an array of objects where we set the id to the document id, and then use the method data() and ... spread in all the fields we're getting from the database into this object
 }
 
-                                                                                // Then - query collection data from our lists collection // getUserLists(userId) function iss specific for getting a specific user's lists // how we use the data (once it's fetched) is in the Lists.jsx component
+/* ######### GET a Specific User's Lists Data from Firestore ########## */                                                                                // Then - query collection data from our lists collection // getUserLists(userId) function iss specific for getting a specific user's lists // how we use the data (once it's fetched) is in the Lists.jsx component
 export async function getUserLists(userId) {                                    // we pass in the user id with "userId" 
     const snapshot = await db
     .collection('lists')                                                        // we reference the collection called lists 
@@ -58,6 +60,8 @@ export async function getUserLists(userId) {                                    
     return data
 }
 
+/* ######### PUT a uploaded Image File in the Firestore Database ########## */ 
+/* this function doesnt need to be exported because we are using it within the createList() function */
 function uploadCoverImage(file) {                                                                                // The uploadCoverImage function lets us upload the image tot he database/ It accepts the user's file // And to use storage, we have a reference to that (towards the top of this file -- const storage = firebaseApp.storage();)
     const uploadTask = storage
         .ref(`images/${file.name}-${file.lastModified}`)                                                         // this `images/${file.name}` images/ creates a folder called images, that we put in the ${} location - giving the file a name with "file.name" (note: there is a name property for the image when the user uploads it)
@@ -74,6 +78,7 @@ function uploadCoverImage(file) {                                               
     })
 }
 
+/* ######### ADD a List the Firestore Database ########## */ 
 export async function createList(list, user) {                      // pass in 2 arguments, list and user
     const { name, description, image } = list                       // we can ^^destructure the list to get back name, description, and image.
     await db.collection('lists').add({                              // to put data on our collection use: db.collection, then reference the *lists* collection
@@ -93,3 +98,4 @@ export async function createList(list, user) {                      // pass in 2
         ]
     })
 }
+
