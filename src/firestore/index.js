@@ -75,3 +75,22 @@ function uploadCoverImage(file) {                                               
     })
 }
 
+export async function createList(list, user) {                      // pass in 2 arguments, list and user
+    const { name, description, image } = list                       // we can ^^destructure the list to get back name, description, and image.
+    await db.collection('lists').add({                              // to put data on our collection use: db.collection, then reference the *lists* collection
+                                                                    // then, add the fields -- name, description, and image (is either going to be am image OR null):
+        name,
+        description,
+        image: image ? await uploadCoverImage(image) : null, 
+    
+        created: firebase.firestore.FieldValue.serverTimestamp(),   // This timestamps the date the data was created with the server method serverTimestamp()
+        author: user.uid,                                           // The author field is the user's id
+        userIds: [user.uid],                                        // then we store the userIds in an array
+        users: [                                                    // but we also store the users in array that gives us more information about each user 
+            {
+                id: user.uid,
+                name: user.displayName
+            }
+        ]
+    })
+}
