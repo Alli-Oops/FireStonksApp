@@ -1,17 +1,19 @@
-// The ListPage.jsx is where we are going to create List items
+// The ListPage.jsx is where we are going to create List items and display them
 
 import React from "react";
 import { Link } from "react-router-dom";
 import Layout from "../components/shared/Layout";
 import useSWR from "swr";
 import CreateItem from "../components/CreateItem";
-import ItemList from "../components/ItemList";
+// import ItemList from "../components/ItemList";
 import JoinList from "../components/JoinList";
 import Error from "../components/shared/Error";
 import Loading from "../components/shared/Loading";
 import * as db from "../firestore";
+import { UserContext } from "..";
 
 function ListPage({location}) {                             // get from props a location we are at 
+    const user = React.useContext(UserContext)
     const listId = location.pathname;                       // and relying on React routerDOM in the index.jsx file we can get the /:listId from the route "path"
     const {data: list, error} = useSWR(listId, db.getlist)  // with this listId we can execute our getList() function 
                 // ^^ we will call the data list
@@ -26,7 +28,8 @@ function ListPage({location}) {                             // get from props a 
                 {list.name} 
                 </h1>
                 <p className="mb-8 leading-relaxed">{list.description}</p>
-                {/* Create new list item */}
+                {/* Create new list item - pass down use as its own prop as well as listId as its own prop */}
+                <CreateItem user={user} listId={listId}/>
                 <p className="text-sm mt-2 text-gray-500 mb-8 w-full">
                 New links appear below in realtime ✨
                 </p>
@@ -54,7 +57,8 @@ function ListPage({location}) {                             // get from props a 
             </div>
             </div>
         </section>
-        {/* display all items in list */}
+        {/* display all items in list is <ItemList/> and to it, we just need to pass down the listId */}
+        <ItemList listId={listId}/>
         </Layout>
     );
 }

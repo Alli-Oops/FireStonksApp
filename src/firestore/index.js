@@ -6,7 +6,7 @@ import "firebase/firestore";
 import "firebase/storage";
 
 //////////////////////////////////////////////////////////////////////////
-/* ######### Integrates Firebase with existing FireStinksApp ########## */
+/* ######### Integrates Firebase with existing FireStonksApp ########## */
 var firebaseConfig = {
     apiKey: "AIzaSyAfP2G73bTgAoGJg-dQUTJBgLRN6jeVDeI",
     authDomain: "firestonks-8f437.firebaseapp.com",
@@ -60,24 +60,6 @@ export async function getUserLists(userId) {                                    
     return data
 }
 
-/* ######### PUT a uploaded Image File in the Firestore Database ########## */ 
-/* this function doesnt need to be exported because we are using it within the createList() function */
-function uploadCoverImage(file) {                                                                                // The uploadCoverImage function lets us upload the image tot he database/ It accepts the user's file // And to use storage, we have a reference to that (towards the top of this file -- const storage = firebaseApp.storage();)
-    const uploadTask = storage
-        .ref(`images/${file.name}-${file.lastModified}`)                                                         // this `images/${file.name}` images/ creates a folder called images, that we put in the ${} location - giving the file a name with "file.name" (note: there is a name property for the image when the user uploads it)
-        .put(file)                                                                                               // then we pass the file to the put method
-    return new Promise((resolve, reject) => {                                                                    // for each promise, we get the resolve and reject functions.. and pass all the code for uploadTask.on() into the promise
-        uploadTask.on(                                                                                           // << we can listen to the progress of this task with uploadTask.on() and give it the first argument as the string "state_changed"
-            'state_changed',                                                    
-            (snapshot) => console.log("image uploading", snapshot),
-            reject,                                                                                              // reject <<here>> and then we can resolve the promise in the *.then() 
-            () => {
-                storage.ref('images').child(`${file.name}-${file.lastModified}`).getDownloadURL().then(resolve)  // THen, << the callback where we can get the URL and the URL comes from: storage.ref() where we pass in images. We need to resolve this as a promise with .then()
-            }                                                                                                    // Since we need to pass the URL to the creatList() function *below* we need to promisify the uploadCoverImage() function.. // by returning a promise, the createList() function can easily resolve it with the *async* *await* syntax.
-        );                                                                                                       // We promisify the the uploadCoverImage(file) function with the line new Promise()        
-    })
-}
-
 /* ######### ADD a List the Firestore Database ########## */ 
 export async function createList(list, user) {                      // pass in 2 arguments, list and user
     const { name, description, image } = list                       // we can ^^destructure the list to get back name, description, and image.
@@ -97,6 +79,7 @@ export async function createList(list, user) {                      // pass in 2
             }
         ]
     })
+}
 
 /* ######### GET a list from the database ########## */ 
 export async function getList(listId) {
@@ -108,9 +91,24 @@ export async function getList(listId) {
         console.error(error);                               // to make sure that the useSWR hook gets access to the error -  we need to throw the error <<here in the catch
         throw Error(error)                                  // throw Error with the error we recieve here.
     }
-    }
+}
 
-
+/* ######### PUT a uploaded Image File in the Firestore Database ########## */ 
+/* this function doesnt need to be exported because we are using it within the createList() function */
+function uploadCoverImage(file) {                                                                                // The uploadCoverImage function lets us upload the image tot he database/ It accepts the user's file // And to use storage, we have a reference to that (towards the top of this file -- const storage = firebaseApp.storage();)
+    const uploadTask = storage
+        .ref(`images/${file.name}-${file.lastModified}`)                                                         // this `images/${file.name}` images/ creates a folder called images, that we put in the ${} location - giving the file a name with "file.name" (note: there is a name property for the image when the user uploads it)
+        .put(file)                                                                                               // then we pass the file to the put method
+    return new Promise((resolve, reject) => {                                                                    // for each promise, we get the resolve and reject functions.. and pass all the code for uploadTask.on() into the promise
+        uploadTask.on(                                                                                           // << we can listen to the progress of this task with uploadTask.on() and give it the first argument as the string "state_changed"
+            'state_changed',                                                    
+            (snapshot) => console.log("image uploading", snapshot),
+            reject,                                                                                              // reject <<here>> and then we can resolve the promise in the *.then() 
+            () => {
+                storage.ref('images').child(`${file.name}-${file.lastModified}`).getDownloadURL().then(resolve)  // THen, << the callback where we can get the URL and the URL comes from: storage.ref() where we pass in images. We need to resolve this as a promise with .then()
+            }                                                                                                    // Since we need to pass the URL to the creatList() function *below* we need to promisify the uploadCoverImage() function.. // by returning a promise, the createList() function can easily resolve it with the *async* *await* syntax.
+        );                                                                                                       // We promisify the the uploadCoverImage(file) function with the line new Promise()        
+    })
 }
 
 //CHECK FOR CHANGES GITHUB..

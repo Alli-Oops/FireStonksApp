@@ -8,7 +8,7 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import ListPage from "./pages/ListPage";
 import HomePage from "./pages/HomePage";
 import SignIn from "./components/SignIn";
-import * as db from "./firestore";                          // no longer need to execute checkAuth here because of the useAuth Hook
+// import * as db from "./firestore";                          // no longer need to execute checkAuth here because of the useAuth Hook
 import Loading from "./components/shared/Loading";
 import useAuth from "./hooks/useAuth";
 
