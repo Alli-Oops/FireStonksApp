@@ -23,9 +23,9 @@ function ListPage({location}) {                             // get from props a 
             <div className="container mx-auto flex flex-col px-5 py-4 justify-center items-center">
             <div className="w-full md:w-2/3 flex flex-col mb-16 items-center text-center">
                 <h1 className="title-font sm:text-4xl text-3xl mb-4 font-medium font-bold text-white">
-                List Name
+                {list.name} 
                 </h1>
-                <p className="mb-8 leading-relaxed">List Description</p>
+                <p className="mb-8 leading-relaxed">{list.description}</p>
                 {/* Create new list item */}
                 <p className="text-sm mt-2 text-gray-500 mb-8 w-full">
                 New links appear below in realtime ✨
