@@ -1,7 +1,7 @@
 /* index.jsx file has our FireStonksApp that we render. It renders our Authenticated routes to the
 pages that our App consists of (Homepage and Listpage)
 */
-
+/*Andrea is now working*/
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
