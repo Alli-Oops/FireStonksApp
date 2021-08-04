@@ -110,5 +110,3 @@ function uploadCoverImage(file) {                                               
         );                                                                                                       // We promisify the the uploadCoverImage(file) function with the line new Promise()        
     })
 }
-
-//CHECK FOR CHANGES GITHUB..

@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import Layout from "../components/shared/Layout";
 import useSWR from "swr";
 import CreateItem from "../components/CreateItem";
-// import ItemList from "../components/ItemList";
+import ItemList from "../components/ItemList";
 import JoinList from "../components/JoinList";
 import Error from "../components/shared/Error";
 import Loading from "../components/shared/Loading";
