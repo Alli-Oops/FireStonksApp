@@ -58,7 +58,7 @@ function UserListCount({ count }) {                                     // we ca
 }
 
 function ListItem({ list }) {                                           // this takes the data from the list prop to display it to the user's lists - but we can destructure the list object
-  const { id, name, description, image, users} = list                          // this destructures the list object to get the values we need - id, name, description, image, and users that are a part of the list
+  const { id, name, description, image, users} = list                   // this destructures the list object to get the values we need - id, name, description, image, and users that are a part of the list
     return (
         <div className="lg:w-1/3 sm:w-1/2 p-4">
         {" "}

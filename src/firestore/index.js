@@ -97,8 +97,20 @@ export async function createList(list, user) {                      // pass in 2
             }
         ]
     })
+
+/* ######### GET a list from the database ########## */ 
+export async function getList(listId) {
+    try {
+    const list = await db.collection('lists').doc(listId).get();
+    if (!list.exists) throw Error(`List doesn't exist`)     // if the list doesnt exist, throw an error
+    return list.data();                                     // if the list exists, return the data
+    } catch (error) {
+        console.error(error);                               // to make sure that the useSWR hook gets access to the error -  we need to throw the error <<here in the catch
+        throw Error(error)                                  // throw Error with the error we recieve here.
+    }
+    }
+
+
 }
-
-
 
 //CHECK FOR CHANGES GITHUB..
