@@ -4,16 +4,19 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Layout from "../components/shared/Layout";
 import useSWR from "swr";
-// import CreateItem from "../components/CreateItem";
-// import ItemList from "../components/ItemList";
-// import JoinList from "../components/JoinList";
-// import Error from "../components/shared/Error";
-// import Loading from "../components/shared/Loading";
+import CreateItem from "../components/CreateItem";
+import ItemList from "../components/ItemList";
+import JoinList from "../components/JoinList";
+import Error from "../components/shared/Error";
+import Loading from "../components/shared/Loading";
 import * as db from "../firestore";
 
-function ListPage() {
-
-    
+function ListPage({location}) {                             // get from props a location we are at 
+    const listId = location.pathname;                       // and relying on React routerDOM in the index.jsx file we can get the /:listId from the route "path"
+    const {data: list, error} = useSWR(listId, db.getlist)  // with this listId we can execute our getList() function 
+                // ^^ we will call the data list
+    if (error) return <Error message={error.message} />     // if error, return <Error/> where the message is set to error.message
+    if (!list) return <Loading/>                            // if we don't have the list, return loading
     return (
         <Layout>
         <section className="text-gray-500 bg-gray-900 body-font">
