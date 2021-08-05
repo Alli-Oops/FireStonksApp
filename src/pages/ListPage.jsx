@@ -17,7 +17,7 @@ function ListPage({ location }) {                               // get from prop
     const listId = location.pathname;                           // .path ?? OR .pathname ?? // and relying on React routerDOM in the index.jsx file we can get the /:listId from the route "path"
     const {data: list, error} = useSWR(listId, db.getList);     // with this listId we can execute our getList() function 
     if (error) return <Error message={error.message} />         // if error, return <Error/> where the message is set to error.message
-    if (!list) return <Loading />;                              // if we don't have the list, return loading
+    if (!list) return <Loading />;                              // if we don't have thw list, return loading
     
     return (
         <Layout>

@@ -115,7 +115,7 @@ export async function getList(listId) {
 /* ######### CREATE List Item ########## */ 
 export async function createListItem({ user, listId, item }) {
     try {
-    const response = await fetch(`https://screenshotapi.net/api/v1/screenshot?url=${item.link}&token=TS0APB6-Y7K4KNE-P9ERC74-VN7JJ5M`)
+    const response = await fetch(`https://shot.screenshotapi.net/screenshot?token=TS0APB6-Y7K4KNE-P9ERC74-VN7JJ5M&url=${item.link}`) // `https://screenshotapi.net/api/v1/screenshot?url=${item.link}&token=TS0APB6-Y7K4KNE-P9ERC74-VN7JJ5M`
     const { screenshot } = await response.json() // to get back our data as json data, we need to await again. and this respone will be an object called screenhot that we can pass to the image field of the list object we're creating
     db.collection('lists').doc(listId).collection('items').add({            // here we are adding a new docoument to the *items subcollection of a particular list
         name: item.name, 

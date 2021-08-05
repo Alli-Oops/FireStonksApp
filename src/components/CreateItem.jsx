@@ -10,16 +10,16 @@ function CreateItem({ user, listId }) {                         // user and list
 
     async function handleCreateItem(event) {
         try {
-        event.preventDefault();                                 // this prevents reloading the page
-        setSubmitting(true)
-        const item = { name, link }                             // this creates an item out of the *name and *link data << we provide them as properties on this item object
-        await db.createListItem({ user, listId, item });
-        setName(''),                                             // clear out our name state
-        setLink('')                                             // clear out our link state
+            event.preventDefault();                                 // this prevents reloading the page
+            setSubmitting(true);
+            const item = { name, link }                             // this creates an item out of the *name and *link data << we provide them as properties on this item object
+            await db.createListItem({ user, listId, item });        // this grabs the 3 values we need frome the database - we can pass those values to index.js' createListItem() function
+            setName('');                                            // clear out our name state
+            setLink('');                                            // clear out our link state
         } catch (error) {
-            setError(error.message)
+            setError(error.message);
         } finally {
-            setSubmitting(false)
+            setSubmitting(false);
         }
     }
 
