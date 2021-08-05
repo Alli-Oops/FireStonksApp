@@ -8,11 +8,11 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import ListPage from "./pages/ListPage";
 import HomePage from "./pages/HomePage";
 import SignIn from "./components/SignIn";
-// import * as db from "./firestore";                          // no longer need to execute checkAuth here because of the useAuth Hook
+// import * as db from "./firestore";                           // no longer need to execute checkAuth here because of the useAuth Hook
 import Loading from "./components/shared/Loading";
 import useAuth from "./hooks/useAuth";
 
-export const UserContext = React.createContext()            //useContext ** this lets us utilize/share *user* data among the various components / pages - wherever we need it. 
+export const UserContext = React.createContext()                // useContext ** this lets us utilize/share *user* data among the various components / pages - wherever we need it. 
 
 function App() {     
     const { user, loading } = useAuth() 
@@ -24,8 +24,8 @@ function AuthApp({ user }) {
     return (
         <BrowserRouter>
         <Switch>
-            <UserContext.Provider value={user}>             {/*The value prop is set to user and this is going to make consuming our user data easy*/}
-            <Route path="/:listId" component={ListPage} />
+            <UserContext.Provider value={user}>             {/* The value prop is set to user and this is going to make consuming our user data easy */}
+            <Route path="/:listId" component={ListPage} /> 
             <Route exact path="/" component={HomePage} />
             </UserContext.Provider>
         </Switch>
@@ -34,7 +34,7 @@ function AuthApp({ user }) {
 }
 
 function UnAuthApp() {
-    return <SignIn/>                                         //This returns the SignIn component for rendering
+    return <SignIn/>                                            //This returns the SignIn component for rendering
 }
 
 ReactDOM.render(

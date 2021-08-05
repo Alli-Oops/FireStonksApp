@@ -37,6 +37,6 @@ function SignIn() {
         </section>
         </div>
     );
-    }
+}
 
 export default SignIn;

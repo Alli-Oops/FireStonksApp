@@ -81,17 +81,6 @@ export async function createList(list, user) {                      // pass in 2
     })
 }
 
-/* ######### GET a list from the database ########## */ 
-export async function getList(listId) {
-    try {
-    const list = await db.collection('lists').doc(listId).get();
-    if (!list.exists) throw Error(`List doesn't exist`)     // if the list doesnt exist, throw an error
-    return list.data();                                     // if the list exists, return the data
-    } catch (error) {
-        console.error(error);                               // to make sure that the useSWR hook gets access to the error -  we need to throw the error <<here in the catch
-        throw Error(error)                                  // throw Error with the error we recieve here.
-    }
-}
 
 /* ######### PUT a uploaded Image File in the Firestore Database ########## */ 
 /* this function doesnt need to be exported because we are using it within the createList() function */
@@ -109,4 +98,37 @@ function uploadCoverImage(file) {                                               
             }                                                                                                    // Since we need to pass the URL to the creatList() function *below* we need to promisify the uploadCoverImage() function.. // by returning a promise, the createList() function can easily resolve it with the *async* *await* syntax.
         );                                                                                                       // We promisify the the uploadCoverImage(file) function with the line new Promise()        
     })
+}
+
+/* ######### GET a list from the database ########## */ 
+export async function getList(listId) {
+    try {
+    const list = await db.collection('lists').doc(listId).get();    // this will get back the specific list
+    if (!list.exists) throw Error(`List doesn't exist`);             // if the list doesnt exist, throw an error
+    return list.data();                                             // if the list exists, return the data
+    } catch (error) {
+        console.error(error);                                       // to make sure that the useSWR hook gets access to the error -  we need to throw the error <<here in the catch
+        throw Error(error);                                         // throw Error with the error we recieve here.
+    }
+}
+
+/* ######### CREATE List Item ########## */ 
+export async function createListItem({ user, listId, item }) {
+    try {
+    const response = await fetch(`https://screenshotapi.net/api/v1/screenshot?url=${item.link}&token=TS0APB6-Y7K4KNE-P9ERC74-VN7JJ5M`)
+    const { screenshot } = await response.json() // to get back our data as json data, we need to await again. and this respone will be an object called screenhot that we can pass to the image field of the list object we're creating
+    db.collection('lists').doc(listId).collection('items').add({            // here we are adding a new docoument to the *items subcollection of a particular list
+        name: item.name, 
+        link: item.link,
+        image: screenshot,
+        created: firebase.firestore.FieldValue.serverTimestamp(),
+        author: {                                                           // the author is an object
+            id: user.uid,
+            username: user.displayName
+        }
+    })
+    } catch (error) {
+        console.error(error)
+        throw new Error(error)
+    }
 }

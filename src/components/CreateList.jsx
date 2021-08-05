@@ -27,11 +27,10 @@ function CreateList({ user }) {
 
     async function handleCreateList() {
         try {
-            setSubmitting(true)
+            setSubmitting(true);
             await db.createList(list, user);                        // pass in list and user - that we should be receiving from props.
-            mutate(user.uid)
-            setList(DEFAULT_LIST)                                   // this will reset the list to DEFAULT_LIST after a user submits a list. To make sure that the list is reset ONLY after the submission is done //... we we need to use async/ await syntax for createlist. (ensures things happen in the correct order.) 
-            setSubmitting(false)
+            mutate(user.uid);
+            setList(DEFAULT_LIST);                                   // this will reset the list to DEFAULT_LIST after a user submits a list. To make sure that the list is reset ONLY after the submission is done //... we we need to use async/ await syntax for createlist. (ensures things happen in the correct order.) 
         } catch(error) {
             console.error(error);
         } finally {
