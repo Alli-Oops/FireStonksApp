@@ -43,29 +43,33 @@ export async function logOut() {
 /////////////////////////////////////////////////////////////////////////
 /* ######### CRUD Data from Firestore ########## */       
 
-/* ######### GET all the Lists Data from Firestore ########## */                // we pass in the collection with "id" which is going to be the 'lists' collection
+/* ######### READ - GET all the Lists Data from Firestore ########## */                // we pass in the collection with "id" which is going to be the 'lists' collection
 export async function getCollection(id) {                                       // to get all the data we need to reference the collection and use the get()
-    const snapshot = await db.collection(id).get()                              // it will be in the form of a promise, so we need to make the function async and await the response // we will get back a query "snapshot" so we'll call the variable holding this "snapshot"
+    const snapshot = await db
+    .collection(id)
+    .get()                                                                      // it will be in the form of a promise, so we need to make the function async and await the response // we will get back a query "snapshot" so we'll call the variable holding this "snapshot"
     const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data()}))       // then all of the data- will be provided on snapshot.docs // then we use the map() function to map over it and for each document, we want to create a new array where we return an object
     console.log(data)                                                           // so an array of objects where we set the id to the document id, and then use the method data() and ... spread in all the fields we're getting from the database into this object
 }
 
-/* ######### GET a Specific User's Lists Data from Firestore ########## */                                                                                // Then - query collection data from our lists collection // getUserLists(userId) function iss specific for getting a specific user's lists // how we use the data (once it's fetched) is in the Lists.jsx component
+/* ######### READ - GET a Specific User's Lists Data from Firestore ########## */                                                                                // Then - query collection data from our lists collection // getUserLists(userId) function iss specific for getting a specific user's lists // how we use the data (once it's fetched) is in the Lists.jsx component
 export async function getUserLists(userId) {                                    // we pass in the user id with "userId" 
     const snapshot = await db
     .collection('lists')                                                        // we reference the collection called lists 
-    .where('author', '==', userId)                                              // then use the where() to say lists where the author is equal to the 'userID'
+    // .where('author', '==', userId)                                              // then use the where() to say lists where the author is equal to the 'userID'
+    .where('userIds', 'array-contains', userId)
     .get();
     const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data()})) ;
     return data
 }
 
-/* ######### ADD a List the Firestore Database ########## */ 
+/* ######### UPDATE - ADD a List the Firestore Database ########## */ 
 export async function createList(list, user) {                      // pass in 2 arguments, list and user
     const { name, description, image } = list                       // we can ^^destructure the list to get back name, description, and image.
-    await db.collection('lists').add({                              // to put data on our collection use: db.collection, then reference the *lists* collection
-                                                                    // then, add the fields -- name, description, and image (is either going to be am image OR null):
-        name,
+    await db
+    .collection('lists')
+    .add({                                                          // to put data on our collection use: db.collection, then reference the *lists* collection
+        name,                                                       // then, add the fields -- name, description, and image (is either going to be am image OR null):
         description,
         image: image ? await uploadCoverImage(image) : null, 
     
@@ -81,8 +85,7 @@ export async function createList(list, user) {                      // pass in 2
     })
 }
 
-
-/* ######### PUT a uploaded Image File in the Firestore Database ########## */ 
+/* ######### UPDATE - PUT a uploaded Image File in the Firestore Database ########## */ 
 /* this function doesnt need to be exported because we are using it within the createList() function */
 function uploadCoverImage(file) {                                                                                // The uploadCoverImage function lets us upload the image tot he database/ It accepts the user's file // And to use storage, we have a reference to that (towards the top of this file -- const storage = firebaseApp.storage();)
     const uploadTask = storage
@@ -100,7 +103,7 @@ function uploadCoverImage(file) {                                               
     })
 }
 
-/* ######### GET a list from the database ########## */ 
+/* ######### READ - GET a list from the database ########## */ 
 export async function getList(listId) {
     try {
     const list = await db.collection('lists').doc(listId).get();    // this will get back the specific list
@@ -112,11 +115,11 @@ export async function getList(listId) {
     }
 }
 
-/* ######### CREATE List Item ########## */ 
+/* ######### CREATE - ADD List Item ########## */ 
 export async function createListItem({ user, listId, item }) {
     try {
     const response = await fetch(`https://shot.screenshotapi.net/screenshot?token=TS0APB6-Y7K4KNE-P9ERC74-VN7JJ5M&url=${item.link}`) // `https://screenshotapi.net/api/v1/screenshot?url=${item.link}&token=TS0APB6-Y7K4KNE-P9ERC74-VN7JJ5M`
-    const { screenshot } = await response.json() // to get back our data as json data, we need to await again. and this respone will be an object called screenhot that we can pass to the image field of the list object we're creating
+    const { screenshot } = await response.json()                            // to get back our data as json data, we need to await again. and this respone will be an object called screenhot that we can pass to the image field of the list object we're creating
     db.collection('lists').doc(listId).collection('items').add({            // here we are adding a new docoument to the *items subcollection of a particular list
         name: item.name, 
         link: item.link,
@@ -133,11 +136,33 @@ export async function createListItem({ user, listId, item }) {
     }
 }
 
-/* ######### Subscribe to List Items ########## */
+/* ######### UPDATE? - Subscribe to List Items ########## */
 export function subscribeToListItems(listId, cb) {        // provide the listId and a callback function
     return db.collection('lists')
     .doc(listId)                                          // doc will be the list id
-    .collection('items')                                 // collections will be the subcollection items
+    .collection('items')                                  // collections will be the subcollection items
     .orderBy('created', 'desc')                           // we order the collections in decending order (newest to oldest) using the orderBy method and the *created field that we have on each item
     .onSnapshot(cb)                                       // onSnapshot returns a subscription function and this is where we pass the callback to. THis is so we can get all of our snapshot data within item list
 } 
+
+
+/* ######### DELETE - Delete List Items ########## */ // We dont need to make this function async because we have a subscription using the .onSnapshot() method ^ to listen for any changes - so we dont need to reload the page or anything
+export function deleteListItem(listId, itemId) {
+    return db.collection('lists')
+    .doc(listId)
+    .collection('items')
+    .doc(itemId)
+    .delete();
+}
+
+/* ######### UPDATE - users can join another users list ########## */
+export async function addUserToList(user, listId) {                     // This looks up the user data and the listId
+    await db.collection('lists').doc(listId).update({                   // then we specify the collection 'lists' in the database, the document by it's 'listId' and then update that data
+        userIds: firebase.firestore.FieldValue.arrayUnion(user.uid),    // specifically updating the userIds array - by passing the user.uid to the arrayUnion method - this just adds the specific users id to the correct spot
+        users: firebase.firestore.FieldValue.arrayUnion({               
+            id: user.uid,
+            name: user.displayName
+        })
+    })
+    window.location.reload();       // this reloads the page
+}

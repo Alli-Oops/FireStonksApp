@@ -30,9 +30,16 @@ function ItemList({ listId }) {
     );
 }
 
-function Item( { listId, item }) {
-    const {id, name, link, image, author, created } = item
-    const date = created ? created.toDate().toLocaleDateString() : null  // the created field gives us access to the toDate method so we can convert that data to a date
+function Item( { listId, item }) {  
+    const {id, name, link, image, author, created } = item                  // destructuring the *id <<here>> within the item() function makes it possible for us to make a delete option for the users
+    const date = created ? created.toDate().toLocaleDateString() : null     // the created field gives us access to the toDate method so we can convert that data to a date
+
+    function handleDeleteItem() {
+        if (window.confirm('Are you sure you want to delete this?')) {
+            db.deleteListItem(listId, id) // we pass the *listId and item *id that is destructured ^ above // we place this handler on the Delete button with the onClick event
+        }
+
+    }
 
     return (
         <div className="xl:w-1/4 md:w-1/2 p-4">
@@ -50,7 +57,10 @@ function Item( { listId, item }) {
                 <h2 className="text-lg text-white font-medium title-font mb-4">{name}</h2>
                 <div className="flex items-center justify-between">
                     <span className="leading-relaxed text-base">Posted {date}</span>
-                    <button className="inline-flex text-white bg-red-500 border-0 py-1 px-2 focus:outline-none hover:bg-red-600 rounded text-lg">
+                    <button 
+                        onClick={handleDeleteItem} 
+                        className="inline-flex text-white bg-red-500 border-0 py-1 px-2 focus:outline-none hover:bg-red-600 rounded text-lg"
+                    >
                         Delete
                     </button>
                 </div>
