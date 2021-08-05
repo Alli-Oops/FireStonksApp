@@ -132,3 +132,12 @@ export async function createListItem({ user, listId, item }) {
         throw new Error(error)
     }
 }
+
+/* ######### Subscribe to List Items ########## */
+export function subscribeToListItems(listId, cb) {        // provide the listId and a callback function
+    return db.collection('lists')
+    .doc(listId)                                          // doc will be the list id
+    .collection('items')                                 // collections will be the subcollection items
+    .orderBy('created', 'desc')                           // we order the collections in decending order (newest to oldest) using the orderBy method and the *created field that we have on each item
+    .onSnapshot(cb)                                       // onSnapshot returns a subscription function and this is where we pass the callback to. THis is so we can get all of our snapshot data within item list
+} 
